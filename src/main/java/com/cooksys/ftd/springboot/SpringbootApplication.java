@@ -3,6 +3,8 @@ package com.cooksys.ftd.springboot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 /*
  * Controller - Has the GET, POST, DELET, etc methods
  * Service - Higher level abstractions
@@ -16,6 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Repositories - layer for interaction with models and performing DB operations
  */
 
+@EnableSwagger2
 @SpringBootApplication
 public class SpringbootApplication {
 
