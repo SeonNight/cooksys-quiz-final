@@ -15,7 +15,7 @@ import com.cooksys.ftd.springboot.exception.QuizAlreadyExists;
 import com.cooksys.ftd.springboot.exception.QuizNotFound;
 import com.cooksys.ftd.springboot.repository.QuizRepository;
 
-//Deals with exceptions and basic logic
+//Buisness logic and throws exceptions
 @Service
 public class QuizService {
 	QuizRepository quizRepository;

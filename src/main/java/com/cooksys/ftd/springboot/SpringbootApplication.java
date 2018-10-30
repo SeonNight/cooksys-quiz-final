@@ -5,19 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-/*
- * Controller - Has the GET, POST, DELET, etc methods
- * Service - Higher level abstractions
- * Repository - Actually mess with data
- * Entities - Data Transfer Objects
- * Database - Where data is stored
- * 
- * Controllers - contains application logic and passing user input data to service
- * Services - The middleware between controller and repository. Gather data from controller,
- * 	performs validation and business logic, and calling repositories for data manipulation.
- * Repositories - layer for interaction with models and performing DB operations
- */
-
 @EnableSwagger2
 @SpringBootApplication
 public class SpringbootApplication {

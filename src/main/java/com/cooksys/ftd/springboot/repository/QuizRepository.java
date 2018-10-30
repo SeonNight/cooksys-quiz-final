@@ -8,7 +8,7 @@ import com.cooksys.ftd.springboot.database.QuizDatabase;
 import com.cooksys.ftd.springboot.entity.Question;
 import com.cooksys.ftd.springboot.entity.Quiz;
 
-//This actually accesses the database
+//Accesses Database
 @Repository
 public class QuizRepository {
 
@@ -17,7 +17,6 @@ public class QuizRepository {
 	// 'Connect' to database
 	public QuizRepository() {
 		this.quizDatabase = new QuizDatabase();
-		this.quizDatabase.init();
 	}
 
 	/**

@@ -19,6 +19,7 @@ import com.cooksys.ftd.springboot.exception.QuizAlreadyExists;
 import com.cooksys.ftd.springboot.exception.QuizNotFound;
 import com.cooksys.ftd.springboot.service.QuizService;
 
+//Deals with requests
 @RestController
 public class QuizController {
 
@@ -34,7 +35,7 @@ public class QuizController {
 	 *
 	 * @param none
 	 * @return a collection of Quizzes
-	 * @throws QuizNotFound 
+	 * @throws QuizNotFound
 	 */
 	@GetMapping("quiz")
 	public List<Quiz> getQuizzes() throws QuizNotFound {
@@ -46,7 +47,7 @@ public class QuizController {
 	 *
 	 * @param RequestBody Quiz
 	 * @return the quiz that was added
-	 * @throws QuizAlreadyExists 
+	 * @throws QuizAlreadyExists
 	 */
 	@PostMapping("quiz")
 	public Quiz addQuiz(@RequestBody Quiz quiz) throws QuizAlreadyExists {
@@ -58,7 +59,7 @@ public class QuizController {
 	 *
 	 * @param PathVariable string name of Quiz
 	 * @return the quiz that was deleted
-	 * @throws QuizNotFound 
+	 * @throws QuizNotFound
 	 */
 	@DeleteMapping("quiz/{quizName}")
 	public Quiz deleteQuiz(@PathVariable("quizName") String quizName) throws QuizNotFound {
@@ -68,12 +69,13 @@ public class QuizController {
 	/**
 	 * Rename a quiz
 	 *
-	 * @param PathVariable string name of Quiz, pathvariable string new name
+	 * @param PathVariable string name of Quiz, PathVariable string new name
 	 * @return the quiz that was altered
-	 * @throws QuizNotFound 
+	 * @throws QuizNotFound
 	 */
 	@PatchMapping("quiz/{quizName}/rename/{newName}")
-	public Quiz renameQuiz(@PathVariable("quizName") String quizName, @PathVariable("newName") String newName) throws QuizNotFound {
+	public Quiz renameQuiz(@PathVariable("quizName") String quizName, @PathVariable("newName") String newName)
+			throws QuizNotFound {
 		return this.quizService.renameQuiz(quizName, newName);
 	}
 
@@ -82,7 +84,7 @@ public class QuizController {
 	 *
 	 * @param PathVariable string name of Quiz
 	 * @return a random question
-	 * @throws QuizNotFound 
+	 * @throws QuizNotFound
 	 */
 	@GetMapping("quiz/{quizName}/random")
 	public Question getRandomQuestion(@PathVariable("quizName") String quizName) throws QuizNotFound {
@@ -94,10 +96,11 @@ public class QuizController {
 	 *
 	 * @param PathVariable string quizName, Request BodyQuestion question
 	 * @return the altered Quiz
-	 * @throws QuestionAlreadyExists, QuizNotFound 
+	 * @throws QuestionAlreadyExists, QuizNotFound
 	 */
 	@PatchMapping("quiz/{quizName}/add")
-	public Quiz addQuestion(@PathVariable("quizName") String quizName, @RequestBody Question question) throws QuizNotFound, QuestionAlreadyExists {
+	public Quiz addQuestion(@PathVariable("quizName") String quizName, @RequestBody Question question)
+			throws QuizNotFound, QuestionAlreadyExists {
 		return this.quizService.addQuestion(quizName, question);
 	}
 
@@ -106,11 +109,11 @@ public class QuizController {
 	 *
 	 * @param PathVariable string name of Quiz, PathVariable string name of question
 	 * @return the deleted question
-	 * @throws QuizNotFound, QuestionNotFound 
+	 * @throws QuizNotFound, QuestionNotFound
 	 */
 	@DeleteMapping("quiz/{quizName}/delete/{question}")
-	public Question deleteQuestion(@PathVariable("quizName") String quizName,
-			@PathVariable("question") String question) throws QuizNotFound, QuestionNotFound {
+	public Question deleteQuestion(@PathVariable("quizName") String quizName, @PathVariable("question") String question)
+			throws QuizNotFound, QuestionNotFound {
 		return this.quizService.deleteQuestion(quizName, question);
 	}
 
@@ -119,7 +122,7 @@ public class QuizController {
 	 *
 	 * @param Quiz
 	 * @return return a float of the grade
-	 * @throws QuizNotFound 
+	 * @throws QuizNotFound
 	 */
 	@PostMapping("quiz/grade")
 	public float getGrade(@RequestBody Quiz quiz) throws QuizNotFound {

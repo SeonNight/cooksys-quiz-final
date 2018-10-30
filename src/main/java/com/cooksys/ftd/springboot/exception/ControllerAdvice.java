@@ -3,6 +3,7 @@ package com.cooksys.ftd.springboot.exception;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+//Controller Advice to handler Exceptions
 @RestControllerAdvice
 public class ControllerAdvice {
 	@ExceptionHandler(QuizNotFound.class)
