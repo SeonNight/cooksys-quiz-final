@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cooksys.ftd.springboot.entity.Question;
 import com.cooksys.ftd.springboot.entity.Quiz;
+import com.cooksys.ftd.springboot.exception.DatabaseEmpty;
 import com.cooksys.ftd.springboot.exception.QuestionAlreadyExists;
 import com.cooksys.ftd.springboot.exception.QuestionNotFound;
 import com.cooksys.ftd.springboot.exception.QuizAlreadyExists;
@@ -35,10 +36,10 @@ public class QuizController {
 	 *
 	 * @param none
 	 * @return a collection of Quizzes
-	 * @throws QuizNotFound
+	 * @throws DatabaseEmpty
 	 */
 	@GetMapping("quiz")
-	public List<Quiz> getQuizzes() throws QuizNotFound {
+	public List<Quiz> getQuizzes() throws DatabaseEmpty {
 		return this.quizService.getQuizzes();
 	}
 
@@ -84,10 +85,10 @@ public class QuizController {
 	 *
 	 * @param PathVariable string name of Quiz
 	 * @return a random question
-	 * @throws QuizNotFound
+	 * @throws QuizNotFound, QuestionNotFound
 	 */
 	@GetMapping("quiz/{quizName}/random")
-	public Question getRandomQuestion(@PathVariable("quizName") String quizName) throws QuizNotFound {
+	public Question getRandomQuestion(@PathVariable("quizName") String quizName) throws QuizNotFound, QuestionNotFound {
 		return this.quizService.getRandomQuestion(quizName);
 	}
 

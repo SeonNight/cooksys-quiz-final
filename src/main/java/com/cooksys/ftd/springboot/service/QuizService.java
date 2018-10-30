@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.cooksys.ftd.springboot.entity.Answer;
 import com.cooksys.ftd.springboot.entity.Question;
 import com.cooksys.ftd.springboot.entity.Quiz;
+import com.cooksys.ftd.springboot.exception.DatabaseEmpty;
 import com.cooksys.ftd.springboot.exception.QuestionAlreadyExists;
 import com.cooksys.ftd.springboot.exception.QuestionNotFound;
 import com.cooksys.ftd.springboot.exception.QuizAlreadyExists;
@@ -55,14 +56,14 @@ public class QuizService {
 	 *
 	 * @param none
 	 * @return a collection of Quizzes
-	 * @throws QuizNotFound
+	 * @throws DatabaseEmpty
 	 */
-	public List<Quiz> getQuizzes() throws QuizNotFound {
+	public List<Quiz> getQuizzes() throws DatabaseEmpty {
 		List<Quiz> quizzes = quizRepository.getQuizzes();
 		if (quizzes != null) {
 			return quizzes;
 		}
-		throw new QuizNotFound();
+		throw new DatabaseEmpty();
 	}
 
 	/**
@@ -112,13 +113,16 @@ public class QuizService {
 	 *
 	 * @param string name of Quiz
 	 * @return a random question
-	 * @throws QuizNotFound
+	 * @throws QuizNotFound, QuestionNotFound
 	 */
-	public Question getRandomQuestion(String quizName) throws QuizNotFound {
+	public Question getRandomQuestion(String quizName) throws QuizNotFound, QuestionNotFound {
 		if (!quizExists(quizName)) {
 			throw new QuizNotFound();
 		}
 		Quiz q = quizRepository.getQuiz(quizName);
+		if (q.getQuestions().isEmpty()) {
+			throw new QuestionNotFound();
+		}
 		return q.getQuestions().get(new Random().nextInt(q.getQuestions().size()));
 	}
 
