@@ -1,6 +1,6 @@
 package com.cooksys.ftd.springboot.controller;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,7 +39,7 @@ public class QuizController {
 	 * @throws DatabaseEmpty
 	 */
 	@GetMapping("quiz")
-	public List<Quiz> getQuizzes() throws DatabaseEmpty {
+	public Set<Quiz> getQuizzes() throws DatabaseEmpty {
 		return this.quizService.getQuizzes();
 	}
 

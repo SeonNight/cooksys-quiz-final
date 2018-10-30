@@ -1,18 +1,21 @@
 package com.cooksys.ftd.springboot.database;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import com.cooksys.ftd.springboot.entity.Question;
 import com.cooksys.ftd.springboot.entity.Quiz;
 
 //This is a pseudo database that do what databases do
 public class QuizDatabase {
-	List<Quiz> quizes;
+	Set<Quiz> quizes;
 
 	public QuizDatabase() {
+		quizes = new HashSet<Quiz>();
 	}
 
-	public QuizDatabase(List<Quiz> quizes) {
+	public QuizDatabase(Set<Quiz> quizes) {
 		this.quizes = quizes;
 	}
 
@@ -22,7 +25,7 @@ public class QuizDatabase {
 	 * @param none
 	 * @return List of quizes
 	 */
-	public List<Quiz> select() {
+	public Set<Quiz> select() {
 		return this.quizes;
 	}
 
@@ -78,9 +81,10 @@ public class QuizDatabase {
 	 * @return none
 	 */
 	public void delete(String quizName) {
-		for (int i = 0; i < quizes.size(); i++) {
-			if (quizes.get(i).getName().equalsIgnoreCase(quizName)) {
-				quizes.remove(i);
+		for (Iterator<Quiz> iterator = quizes.iterator(); iterator.hasNext();) {
+			Quiz s = iterator.next();
+			if (s.getName().equals(quizName)) {
+				iterator.remove();
 			}
 		}
 	}
@@ -92,11 +96,13 @@ public class QuizDatabase {
 	 * @return none
 	 */
 	public void delete(String quizName, String questionText) {
-		for (int i = 0; i < quizes.size(); i++) {
-			if (quizes.get(i).getName().equalsIgnoreCase(quizName)) {
-				for (int n = 0; n < quizes.get(i).getQuestions().size(); n++) {
-					if (quizes.get(i).getQuestions().get(n).getQuestion().equalsIgnoreCase(questionText)) {
-						quizes.get(i).getQuestions().remove(n);
+		for (Quiz quiz : quizes) {
+			if (quiz.getName().equals(quizName)) {
+				for (Iterator<Question> iterator = quiz.getQuestions().iterator(); iterator.hasNext();) {
+					Question s = iterator.next();
+					if (s.getQuestion().equals(questionText)) {
+						iterator.remove();
+						return;
 					}
 				}
 			}
@@ -111,11 +117,11 @@ public class QuizDatabase {
 		}
 	}
 
-	public List<Quiz> getQuizes() {
+	public Set<Quiz> getQuizes() {
 		return quizes;
 	}
 
-	public void setQuizes(List<Quiz> quizes) {
+	public void setQuizes(Set<Quiz> quizes) {
 		this.quizes = quizes;
 	}
 }

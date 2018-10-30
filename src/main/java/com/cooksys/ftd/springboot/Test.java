@@ -1,6 +1,6 @@
 package com.cooksys.ftd.springboot;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import com.cooksys.ftd.springboot.database.QuizDatabase;
 import com.cooksys.ftd.springboot.entity.Answer;
@@ -12,13 +12,21 @@ public class Test {
 		QuizDatabase quizDatabase = new QuizDatabase();
 
 		Answer a1 = new Answer("AAAAHHHHHHHHH", false);
-		Question q1 = new Question("This is a QUESTION!", new ArrayList<Answer>());
+		Question q1 = new Question("This is a QUESTION!", new HashSet<Answer>());
 		q1.getAnswers().add(a1);
-		Quiz qu1 = new Quiz("Hello", new ArrayList<Question>());
+		Quiz qu1 = new Quiz("Hello", new HashSet<Question>());
 		qu1.getQuestions().add(q1);
 
+		Answer a2 = new Answer("AAAddHHHHHHH", false);
+		Question q2a = new Question("Ts is a QUESTION!", new HashSet<Answer>());
+		q2a.getAnswers().add(a2);
+		Quiz qu2 = new Quiz("Quiz1", new HashSet<Question>());
+		qu2.getQuestions().add(q2a);
+
 		System.out.println("---Insert---");
+
 		quizDatabase.insert(qu1);
+		quizDatabase.insert(qu2);
 
 		for (Quiz quiz : quizDatabase.select()) {
 			System.out.println("Q:" + quiz.getName());
@@ -57,7 +65,7 @@ public class Test {
 
 		System.out.println("---Insert Question---");
 
-		Question q2 = new Question("This is new Question", new ArrayList<Answer>());
+		Question q2 = new Question("This is new Question", new HashSet<Answer>());
 		quizDatabase.insert("Hello", q2);
 
 		for (Quiz quiz : quizDatabase.select()) {

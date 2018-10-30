@@ -1,6 +1,6 @@
 package com.cooksys.ftd.springboot.repository;
 
-import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
@@ -25,9 +25,8 @@ public class QuizRepository {
 	 * @param none
 	 * @return a collection of Quizzes
 	 */
-	public List<Quiz> getQuizzes() {
-		List<Quiz> quizzes = quizDatabase.select();
-		return quizzes;
+	public Set<Quiz> getQuizzes() {
+		return quizDatabase.select();
 	}
 
 	/**

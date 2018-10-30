@@ -1,7 +1,7 @@
 package com.cooksys.ftd.springboot.service;
 
-import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,8 +58,8 @@ public class QuizService {
 	 * @return a collection of Quizzes
 	 * @throws DatabaseEmpty
 	 */
-	public List<Quiz> getQuizzes() throws DatabaseEmpty {
-		List<Quiz> quizzes = quizRepository.getQuizzes();
+	public Set<Quiz> getQuizzes() throws DatabaseEmpty {
+		Set<Quiz> quizzes = quizRepository.getQuizzes();
 		if (quizzes != null) {
 			return quizzes;
 		}
@@ -123,7 +123,7 @@ public class QuizService {
 		if (q.getQuestions().isEmpty()) {
 			throw new QuestionNotFound();
 		}
-		return q.getQuestions().get(new Random().nextInt(q.getQuestions().size()));
+		return ((Question[]) q.getQuestions().toArray())[new Random().nextInt(q.getQuestions().size())];
 	}
 
 	/**

@@ -1,15 +1,15 @@
 package com.cooksys.ftd.springboot.entity;
 
-import java.util.List;
+import java.util.Set;
 
 public class Question {
 	private String question;
-	private List<Answer> answers;
+	private Set<Answer> answers;
 
 	public Question() {
 	}
 
-	public Question(String question, List<Answer> answers) {
+	public Question(String question, Set<Answer> answers) {
 		this.question = question;
 		this.answers = answers;
 	}
@@ -22,11 +22,11 @@ public class Question {
 		this.question = question;
 	}
 
-	public List<Answer> getAnswers() {
+	public Set<Answer> getAnswers() {
 		return answers;
 	}
 
-	public void setAnswers(List<Answer> answers) {
+	public void setAnswers(Set<Answer> answers) {
 		this.answers = answers;
 	}
 
