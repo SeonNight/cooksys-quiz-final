@@ -60,10 +60,10 @@ public class QuizService {
 	 */
 	public Set<Quiz> getQuizzes() throws DatabaseEmpty {
 		Set<Quiz> quizzes = quizRepository.getQuizzes();
-		if (quizzes != null) {
-			return quizzes;
+		if (quizzes.isEmpty()) {
+			throw new DatabaseEmpty();
 		}
-		throw new DatabaseEmpty();
+		return quizzes;
 	}
 
 	/**
@@ -123,7 +123,8 @@ public class QuizService {
 		if (q.getQuestions().isEmpty()) {
 			throw new QuestionNotFound();
 		}
-		return ((Question[]) q.getQuestions().toArray())[new Random().nextInt(q.getQuestions().size())];
+		Object[] questions = q.getQuestions().toArray();
+		return (Question) questions[new Random().nextInt(q.getQuestions().size())];
 	}
 
 	/**
