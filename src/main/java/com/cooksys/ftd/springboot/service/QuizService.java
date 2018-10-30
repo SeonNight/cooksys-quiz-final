@@ -6,6 +6,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cooksys.ftd.springboot.entity.Answer;
 import com.cooksys.ftd.springboot.entity.Question;
 import com.cooksys.ftd.springboot.entity.Quiz;
 import com.cooksys.ftd.springboot.exception.QuestionAlreadyExists;
@@ -14,26 +15,51 @@ import com.cooksys.ftd.springboot.exception.QuizAlreadyExists;
 import com.cooksys.ftd.springboot.exception.QuizNotFound;
 import com.cooksys.ftd.springboot.repository.QuizRepository;
 
-//Throws new exceptions
+//Deals with exceptions and basic logic
 @Service
 public class QuizService {
 	QuizRepository quizRepository;
-	
+
 	@Autowired
 	public QuizService(QuizRepository quizRepository) {
 		this.quizRepository = quizRepository;
 	}
-	
+
+	/**
+	 * Does quiz Exist
+	 *
+	 * @param name of quiz
+	 * @return true if it exists, false if it doesn't
+	 */
+	public boolean quizExists(String quizName) {
+		return (quizRepository.getQuiz(quizName) != null);
+	}
+
+	/**
+	 * Does question Exist
+	 *
+	 * @param name of quiz and name of question
+	 * @return true if it exists, false if it doesn't
+	 */
+	public boolean questionExists(String quizName, String questionText) {
+		for (Question q : quizRepository.getQuiz(quizName).getQuestions()) {
+			if (q.getQuestion().equalsIgnoreCase(questionText)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Get a Collection of Quizzes
 	 *
 	 * @param none
 	 * @return a collection of Quizzes
-	 * @throws QuizNotFound 
+	 * @throws QuizNotFound
 	 */
 	public List<Quiz> getQuizzes() throws QuizNotFound {
 		List<Quiz> quizzes = quizRepository.getQuizzes();
-		if(quizzes != null) {
+		if (quizzes != null) {
 			return quizzes;
 		}
 		throw new QuizNotFound();
@@ -47,11 +73,10 @@ public class QuizService {
 	 * @throws QuizAlreadyExists
 	 */
 	public Quiz addQuiz(Quiz quiz) throws QuizAlreadyExists {
-		Quiz q = quizRepository.addQuiz(quiz);
-		if(q != null) {
-			return q;
+		if (quizExists(quiz.getName())) {
+			throw new QuizAlreadyExists();
 		}
-		throw new QuizAlreadyExists();
+		return quizRepository.addQuiz(quiz);
 	}
 
 	/**
@@ -62,11 +87,10 @@ public class QuizService {
 	 * @throws QuizNotFound
 	 */
 	public Quiz deleteQuiz(String quizName) throws QuizNotFound {
-		Quiz q = quizRepository.deleteQuiz(quizName);
-		if(q != null) {
-			return q;
+		if (!quizExists(quizName)) {
+			throw new QuizNotFound();
 		}
-		throw new QuizNotFound();
+		return quizRepository.deleteQuiz(quizName);
 	}
 
 	/**
@@ -77,11 +101,10 @@ public class QuizService {
 	 * @throws QuizNotFound
 	 */
 	public Quiz renameQuiz(String quizName, String newName) throws QuizNotFound {
-		Quiz q = quizRepository.renameQuiz(quizName, newName);
-		if(q != null) {
-			return q;
+		if (!quizExists(quizName)) {
+			throw new QuizNotFound();
 		}
-		throw new QuizNotFound();
+		return quizRepository.renameQuiz(quizName, quizName);
 	}
 
 	/**
@@ -92,12 +115,11 @@ public class QuizService {
 	 * @throws QuizNotFound
 	 */
 	public Question getRandomQuestion(String quizName) throws QuizNotFound {
-		Quiz q = quizRepository.getQuiz(quizName);
-		if(q == null) {
+		if (!quizExists(quizName)) {
 			throw new QuizNotFound();
 		}
-		Random rand = new Random();
-		return q.getQuestions().get(rand.nextInt(q.getQuestions().size()));
+		Quiz q = quizRepository.getQuiz(quizName);
+		return q.getQuestions().get(new Random().nextInt(q.getQuestions().size()));
 	}
 
 	/**
@@ -108,11 +130,13 @@ public class QuizService {
 	 * @throws QuizNotFound, QuestionAlreadyExists
 	 */
 	public Quiz addQuestion(String quizName, Question question) throws QuizNotFound, QuestionAlreadyExists {
-		Quiz q = quizRepository.addQuestion(quizName, question);
-		if(q != null) {
-			return q;
+		if (!quizExists(quizName)) {
+			throw new QuizNotFound();
 		}
-		throw new QuizNotFound();
+		if (questionExists(quizName, question.getQuestion())) {
+			throw new QuestionAlreadyExists();
+		}
+		return quizRepository.addQuestion(quizName, question);
 	}
 
 	/**
@@ -123,11 +147,13 @@ public class QuizService {
 	 * @throws QuizNotFound, QuestionNotFound
 	 */
 	public Question deleteQuestion(String quizName, String questionText) throws QuizNotFound, QuestionNotFound {
-		Question q = quizRepository.deleteQuestion(quizName, questionText);
-		if(q != null) {
-			return q;
+		if (!quizExists(quizName)) {
+			throw new QuizNotFound();
 		}
-		throw new QuizNotFound();
+		if (!questionExists(quizName, questionText)) {
+			throw new QuestionNotFound();
+		}
+		return quizRepository.deleteQuestion(quizName, questionText);
 	}
 
 	/**
@@ -137,6 +163,19 @@ public class QuizService {
 	 * @return return a float of the grade
 	 */
 	public float getGrade(Quiz quiz) {
-		return quizRepository.getGrade(quiz);
+		float numQuestions = 0;
+		float numCorrectAns = 0;
+		for (Question question : quiz.getQuestions()) {
+			numQuestions++;
+			for (Answer answer : question.getAnswers()) {
+				if (answer.isCorrect()) {
+					numCorrectAns++;
+				}
+			}
+		}
+		if (numQuestions == 0) {
+			return 100f;
+		}
+		return (numCorrectAns / numQuestions) * 100;
 	}
 }

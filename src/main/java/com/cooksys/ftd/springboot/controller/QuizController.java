@@ -122,7 +122,7 @@ public class QuizController {
 	 * @throws QuizNotFound 
 	 */
 	@PostMapping("quiz/grade")
-	public float getGrade(Quiz quiz) throws QuizNotFound {
+	public float getGrade(@RequestBody Quiz quiz) throws QuizNotFound {
 		return this.quizService.getGrade(quiz);
 	}
 }
